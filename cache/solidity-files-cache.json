@@ -1,10 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "D:\\coding\\BlockChain\\auth\\contracts\\Lock.sol": {
-      "lastModificationDate": 1691575278900,
-      "contentHash": "ae66265769cc28ebdaa34881df95bc5e",
-      "sourceName": "contracts/Lock.sol",
+    "D:\\coding\\BlockChain\\auth\\contracts\\Auth.sol": {
+      "lastModificationDate": 1693153750372,
+      "contentHash": "9a4d2f6310bb529cbfa3a3bf223d006f",
+      "sourceName": "contracts/Auth.sol",
       "solcConfig": {
         "version": "0.8.19",
         "settings": {
@@ -30,10 +30,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.9"
+        "^0.8.19"
       ],
       "artifacts": [
-        "Lock"
+        "PremiumContract"
       ]
     }
   }
