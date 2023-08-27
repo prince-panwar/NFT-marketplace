@@ -28,7 +28,7 @@ const [contractInstance,setContractInstance] = useState<Contract|undefined>();
 const [currentUser,setCurrentUser] = useState<string|undefined>(undefined);
 const [provider,setProvider] = useState<BrowserProvider|undefined>();
 const abi = ContractAbi.abi;
-const contractAddress="0xaFF4b45DDBB851731EC1cCe24fB2C7141A953Ffe";
+const contractAddress="0x8a3e205607E92fea1554E80d4281144aD0207C88";
 const router =useRouter();
 
 async function getProvider(){
@@ -94,7 +94,7 @@ const routeUser= async()=>{
         if(isPremiumUser){
             router.push("/Premium");
         }else{
-            router.push("/payPremium");
+            router.push("/PayPremium");
         }
       }
     

@@ -2,7 +2,7 @@ import hre from "hardhat";
 
 async function main() {
  //simple deploy script for contract Auth
-  const Auth = await hre.ethers.deployContract("Auth");
+  const Auth = await hre.ethers.deployContract("PremiumContract");
   await Auth.waitForDeployment();
   console.log("Auth deployed to:", Auth.target);
 

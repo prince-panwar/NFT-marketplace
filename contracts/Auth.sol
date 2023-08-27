@@ -25,9 +25,9 @@ contract PremiumContract {
     constructor() {
         owner = msg.sender;
         
-        premiums[PremiumType.OneMonth] = Premium(1 ether, 30 seconds);
-        premiums[PremiumType.SixMonths] = Premium(5 ether, 1 minutes);
-        premiums[PremiumType.OneYear] = Premium(9 ether, 2 minutes);
+      premiums[PremiumType.OneMonth] = Premium(100000000000000, 30 seconds); 
+      premiums[PremiumType.SixMonths] = Premium(200000000000000, 1 minutes); 
+      premiums[PremiumType.OneYear] = Premium(300000000000000, 2 minutes);
     }
     
     modifier onlyOwner() {
