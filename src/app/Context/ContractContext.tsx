@@ -84,19 +84,26 @@ const getInstance= async()=>{
         const signer = await provider?.getSigner();
         const contractInst = new ethers.Contract(contractAddress,abi,signer);
         setContractInstance(contractInst);
-        await routeUser();
+        routeUser(contractInst);
         }catch(err:any){
           console.log(err.message);
         }
       }
-const routeUser= async()=>{
-         const isPremiumUser= await contractInstance?.checkValidPremium();
-        if(isPremiumUser){
+      const routeUser = async (contractInst: ethers.Contract) => {
+        try {
+          const isPremiumUser: boolean = await contractInst.checkValidPremium();
+          console.log(isPremiumUser);
+      
+          if (isPremiumUser) {
             router.push("/Premium");
-        }else{
+          } else {
             router.push("/PayPremium");
+          }
+        } catch (error) {
+          console.error("Error while routing:", error);
         }
-      }
+      };
+    
     
     
       return (

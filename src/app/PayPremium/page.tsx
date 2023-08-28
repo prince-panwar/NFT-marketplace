@@ -1,7 +1,7 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useContract } from '../Context/ContractContext';
-
+import { useRouter } from 'next/navigation';
 const Page = () => {
     const [selectedPremiumIndex, setSelectedPremiumIndex] = useState(0); // Initialize with 0
     const [error, setError] = useState("");
@@ -9,16 +9,25 @@ const Page = () => {
     const premiumTypes = ["OneMonth", "SixMonth", "OneYear"];
     const premiumPrices = [100000000000000, 200000000000000, 300000000000000];
     const contract = useContract()?.contractInstance;
-
+    const router =useRouter();
+    useEffect(() => {
+        if(!contract){
+          router.push('/');
+        }
+      
+      }, []);
     const handlePay = async () => {
         try {
-            await contract?.purchasePremium(selectedPremiumIndex,{value:premiumPrices[selectedPremiumIndex]}); // Pass the index
+           let tx = await contract?.purchasePremium(selectedPremiumIndex,{value:premiumPrices[selectedPremiumIndex]});
+            await tx.wait();// Pass the index
             setMessage("Premium purchased successfully");
+            router.push('/Premium');
         } catch (e:any) {
             setError(e.message);
             setMessage("");
         }
     }
+ 
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
