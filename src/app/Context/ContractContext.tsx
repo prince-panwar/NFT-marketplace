@@ -90,11 +90,11 @@ const getInstance= async()=>{
       }
       const routeUser = async (contractInst: ethers.Contract) => {
         try {
-          const isPremiumUser: boolean = await contractInst.checkValidPremium();
+          const isPremiumUser: boolean = await contractInst?.checkValidPremium();
           console.log(isPremiumUser);
       
           if (isPremiumUser) {
-            router.push("/Premium");
+            router.push("/Login");
           } else {
             router.push("/PayPremium");
           }

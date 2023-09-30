@@ -24,9 +24,9 @@ const Page = () => {
             setError("Passwords should be same");
             return;
         }
-        console.log(selectedPremiumIndex);
-        console.log(password);
-        console.log(premiumPrices[selectedPremiumIndex]);
+        // console.log(selectedPremiumIndex);
+        // console.log(password);
+        // console.log(premiumPrices[selectedPremiumIndex]);
 
         try {
             let tx = await contract?.purchasePremium(selectedPremiumIndex,password,{value:premiumPrices[selectedPremiumIndex]});
