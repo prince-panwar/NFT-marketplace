@@ -2,8 +2,11 @@
 import React, { useState,useEffect } from "react";
 import { useContract } from '../Context/ContractContext';
 import { useRouter } from 'next/navigation';
+
 const Page = () => {
-    const [selectedPremiumIndex, setSelectedPremiumIndex] = useState(0); // Initialize with 0
+    const [selectedPremiumIndex, setSelectedPremiumIndex] = useState(0);
+    const [password , setPassword] = useState<string|undefined>(undefined); // Initialize with 0
+    const [confirmpassword , setConfirmPassword] = useState<string|undefined>(undefined); // Initialize with 0
     const [error, setError] = useState("");
     const [message, setMessage] = useState(""); 
     const premiumTypes = ["OneMonth", "SixMonth", "OneYear"];
@@ -17,9 +20,18 @@ const Page = () => {
       
       }, []);
     const handlePay = async () => {
+        if(password!==confirmpassword){
+            setError("Passwords should be same");
+            return;
+        }
+        console.log(selectedPremiumIndex);
+        console.log(password);
+        console.log(premiumPrices[selectedPremiumIndex]);
+
         try {
-           let tx = await contract?.purchasePremium(selectedPremiumIndex,{value:premiumPrices[selectedPremiumIndex]});
+            let tx = await contract?.purchasePremium(selectedPremiumIndex,password,{value:premiumPrices[selectedPremiumIndex]});
             await tx.wait();// Pass the index
+            console.log(await tx.wait());
             setMessage("Premium purchased successfully");
             router.push('/Premium');
         } catch (e:any) {
@@ -50,6 +62,21 @@ const Page = () => {
                         </option>
                     ))}
                 </select>
+                <br />
+                
+                <input  
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password" 
+                placeholder="Enter Password"
+                className="text-black mb-4"/>
+                <br />
+                <input  
+                value={confirmpassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                type="password" 
+                placeholder="Confirm Password"
+                className="text-black mb-4"/>
                 <br />
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded mb-4"

@@ -28,7 +28,7 @@ const [contractInstance,setContractInstance] = useState<Contract|undefined>();
 const [currentUser,setCurrentUser] = useState<string|undefined>(undefined);
 const [provider,setProvider] = useState<BrowserProvider|undefined>();
 const abi = ContractAbi.abi;
-const contractAddress="0x8a3e205607E92fea1554E80d4281144aD0207C88";
+const contractAddress="0xABE8b1243EC7862ebEF27f23e0EEb467c376EF20";
 const router =useRouter();
 
 async function getProvider(){
@@ -61,11 +61,11 @@ async function getProvider(){
           }
         };
       
-    
+
 const connectWallet =async()=>{
   await getProvider();
       try{
-        
+
         if(provider){
         const account = await provider.send('eth_requestAccounts',[]);
         setCurrentUser(account[0]);
@@ -74,7 +74,6 @@ const connectWallet =async()=>{
         console.log("connect wallet called")
         }
       }catch(err:any){
-      
         console.log(err.message)
       }
       }

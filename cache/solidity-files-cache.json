@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "D:\\coding\\BlockChain\\auth\\contracts\\Auth.sol": {
-      "lastModificationDate": 1693159738317,
-      "contentHash": "c296dc11947f348a2f20090d883a3113",
+      "lastModificationDate": 1696070840483,
+      "contentHash": "340816dd86c092e767ea3fc96003d912",
       "sourceName": "contracts/Auth.sol",
       "solcConfig": {
         "version": "0.8.19",
