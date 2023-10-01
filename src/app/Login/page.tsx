@@ -30,9 +30,12 @@ useEffect(() => {
     console.log("login called")
     try {
       const tx:boolean = await contract?.checkValidPassword(password);
-      if(!tx){ 
+      if(tx){ 
       setMessage("Login successful");
       router.push('/Premium');
+    }else{
+      setError("Wrong Password");
+      setMessage("");
     }
      
     } catch (e:any) {
