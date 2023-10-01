@@ -17,23 +17,23 @@ const Page=()=>{
   const [error,setError] = useState<string>();
   const contract = useContract()?.contractInstance;
   const router =useRouter();
-  // useEffect(() => {
-  //   if (!contract) {
-  //     router.push('/');
-  //   }
-  //   (async () => {
-  //     try {
-  //       const isPremiumUser: boolean = await contract?.checkValidPremium();
-  //       console.log(isPremiumUser);
-  //       if (!isPremiumUser) {
-  //         router.push("/PayPremium");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error while routing:", error);
-  //     }
-  //   })();
-  // }, []);
-
+  useEffect(() => {
+    if (!contract) {
+      router.push('/');
+    }
+    (async () => {
+      try {
+        const isPremiumUser: boolean = await contract?.checkValidPremium();
+        console.log(isPremiumUser);
+        if (!isPremiumUser) {
+          router.push("/PayPremium");
+        }
+      } catch (error) {
+        console.error("Error while routing:", error);
+      }
+    })();
+  }, []);
+ 
   const fetchNfts = async () => {
     setError("");
    try{
