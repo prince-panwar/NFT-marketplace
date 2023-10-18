@@ -1,10 +1,10 @@
-import ConnectWallet from "./components/connectWallet"
-
+import Hero from "./components/hero";
+import Navbar from "./components/navbar";
 export default function Home() {
   return (
   <div>
-    <ConnectWallet/>
+  <Navbar/>
+  <Hero/>
   </div>
-
-  )
+)
 }

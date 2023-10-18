@@ -57,10 +57,10 @@ async function getProvider(){
               console.log("Accounts updated");
             }
           } catch (error) {
-            console.error("Error updating wallet address:", error);
+            console.log("Error updating wallet address:", error);
           }
         };
-      
+
 
 const connectWallet =async()=>{
   await getProvider();
@@ -89,7 +89,9 @@ const getInstance= async()=>{
         }
       }
       const routeUser = async (contractInst: ethers.Contract) => {
+        console.log("route user called")
         try {
+          
           const isPremiumUser: boolean = await contractInst?.checkValidPremium();
           console.log(isPremiumUser);
       

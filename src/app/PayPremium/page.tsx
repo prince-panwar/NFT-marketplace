@@ -2,6 +2,7 @@
 import React, { useState,useEffect } from "react";
 import { useContract } from '../Context/ContractContext';
 import { useRouter } from 'next/navigation';
+import Navbar from "../components/navbar";
 
 const Page = () => {
     const [selectedPremiumIndex, setSelectedPremiumIndex] = useState(0);
@@ -42,6 +43,7 @@ const Page = () => {
  
 
     return (
+        <><Navbar/>
         <div className="flex flex-col items-center justify-center h-screen">
             <div className="text-red-500 text-center mb-4">
             </div> 
@@ -88,6 +90,7 @@ const Page = () => {
                 {message && <p className="text-green-500">{message}</p>}
             </div>
         </div>
+        </>
     )
 }
 

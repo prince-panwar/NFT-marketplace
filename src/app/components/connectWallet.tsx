@@ -8,10 +8,8 @@ export default function ConnectWallet() {
     contract?.connectWallet();
 };
  return (
-    <div className='flex justify-center items-center h-screen'>
-      <div>
-        <button onClick={connect} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl">Connect Wallet</button>
-      </div>
-    </div>
-  )
+  (contract?.currentUser)?<div>{`${contract.currentUser.substring(0,4)}...`}</div>:<div> <button onClick={connect}  className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-gray-800 hover:bg-white mt-4 lg:mt-0" >Connect Wallet</button></div>
+ 
+      
+    )
 }
