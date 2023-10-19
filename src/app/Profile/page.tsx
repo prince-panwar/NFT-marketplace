@@ -7,7 +7,7 @@ import { useContract } from '../Context/ContractContext';
 import { useRouter } from 'next/navigation';
 const config = {
     apiKey: process.env.API_KEY,
-    network: Network.ETH_MAINNET,
+    network: Network.ETH_SEPOLIA,
   };
   
 const Page = () => {

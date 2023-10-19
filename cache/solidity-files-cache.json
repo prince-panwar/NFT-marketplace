@@ -37,8 +37,8 @@
       ]
     },
     "D:\\coding\\BlockChain\\auth\\contracts\\minter.sol": {
-      "lastModificationDate": 1697735019610,
-      "contentHash": "aafc8954a0bfcf9bd469d2ea1e0fbd0f",
+      "lastModificationDate": 1697737172855,
+      "contentHash": "8f8752b8ba90d50a2077ac40578e5571",
       "sourceName": "contracts/minter.sol",
       "solcConfig": {
         "version": "0.8.20",

@@ -28,7 +28,7 @@ function withdraw()external onlyOwner{
     _requireOwned(tokenId);
 
     string memory baseURI = _baseURI();
-    return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, abi.encode(tokenId))) : "";
+    return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, abi.encode(tokenId),".json")) : "";
 }
  function _baseURI() internal view  override returns(string memory){
      return URI;

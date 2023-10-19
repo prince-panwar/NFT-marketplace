@@ -17,7 +17,7 @@ export default function Mint() {
             console.log(isPremiumUser);
   
             if (isPremiumUser) {
-              router.push("/Login");
+              router.push("/MintNFT");
             } else {
               router.push("/PayPremium");
             }

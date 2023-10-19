@@ -3,6 +3,7 @@ import React, { createContext,useContext, useState } from 'react';
 import { ethers ,BrowserProvider,Eip1193Provider,Contract} from 'ethers';
 import detectEthereumProvider from '@metamask/detect-provider';
 import ContractAbi from "../../../artifacts/contracts/Auth.sol/PremiumContract.json";
+import factoryContractAbi from "../../../artifacts/contracts/minterFactory.sol/MyNFTFactory.json";
 import { MetaMaskInpageProvider } from "@metamask/providers"
 import { useRouter } from 'next/navigation';
 import { Maybe } from '@metamask/providers/dist/utils';
@@ -10,6 +11,7 @@ import { Maybe } from '@metamask/providers/dist/utils';
 type ContractContextValue={
     currentUser:string|undefined,
     contractInstance:Contract|undefined,
+    factoryContractInstance:Contract|undefined,
     connectWallet: () => {}
   
 }
@@ -25,9 +27,12 @@ interface ContractProviderProps {
 
 export const ContractProvider:React.FC<ContractProviderProps> = ({ children }) => {
 const [contractInstance,setContractInstance] = useState<Contract|undefined>();
+const [factoryContractInstance,setFactoryContractInstance] = useState<Contract|undefined>();
 const [currentUser,setCurrentUser] = useState<string|undefined>(undefined);
 const [provider,setProvider] = useState<BrowserProvider|undefined>();
 const abi = ContractAbi.abi;
+const factoryAbi = factoryContractAbi.abi;
+const FACTORY_CONTRACT_ADDRESS="0x009c4D687550f46e3Ab0FEd2551401a0f36C27Ec";
 const contractAddress="0xABE8b1243EC7862ebEF27f23e0EEb467c376EF20";
 const router =useRouter();
 
@@ -83,11 +88,22 @@ const getInstance= async()=>{
         const signer = await provider?.getSigner();
         const contractInst = new ethers.Contract(contractAddress,abi,signer);
         setContractInstance(contractInst);
+        getFactoryInstance();
         routeUser(contractInst);
         }catch(err:any){
           console.log(err.message);
         }
       }
+const getFactoryInstance = async () => {
+        try {
+          const signer = await provider?.getSigner();
+          const contractInst = new ethers.Contract(FACTORY_CONTRACT_ADDRESS, factoryAbi, signer);
+          setFactoryContractInstance(contractInst);
+        
+        } catch (error) {
+          console.error("Error while getting factory instance:", error);
+        }
+}
       const routeUser = async (contractInst: ethers.Contract) => {
         console.log("route user called")
         try {
@@ -108,7 +124,7 @@ const getInstance= async()=>{
     
     
       return (
-        <ContractContext.Provider value={{currentUser, contractInstance, connectWallet }}>
+        <ContractContext.Provider value={{currentUser, contractInstance,factoryContractInstance, connectWallet }}>
           {children}
         </ContractContext.Provider>
       );

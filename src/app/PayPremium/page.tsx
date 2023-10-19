@@ -34,7 +34,7 @@ const Page = () => {
             await tx.wait();// Pass the index
             console.log(await tx.wait());
             setMessage("Premium purchased successfully");
-            router.push('/Premium');
+            router.push('/MintNFT');
         } catch (e:any) {
             setError(e.message);
             setMessage("");
