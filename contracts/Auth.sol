@@ -12,6 +12,7 @@ contract PremiumContract {
     // Use a struct array instead of an enum mapping
     Premium[] public premiums;
 
+
     constructor() {
     owner = msg.sender;
     // Push new premiums to the array

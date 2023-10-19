@@ -43,8 +43,10 @@ const Page = () => {
  
 
     return (
-        <><Navbar/>
-        <div className="flex flex-col items-center justify-center h-screen">
+        <>
+        <Navbar/>
+        <div className="relative min-h-screen before:content-[''] before:bg-red-500 before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:bg-[url('https://lh3.googleusercontent.com/ujepnqpnL0nDQIHsWxlCXzyw4pf01yjz1Jmb4kAQHumJAPrSEj0-e3ABMZlZ1HEpJoqwOcY_kgnuJGzfXbd2Tijri66GXUtfN2MXQA=s250')] before:bg-cover before:bg-center before:opacity-30 before:blur before:pointer-events-none">
+      <div className="flex flex-col w-full justify-center items-center gap-y-2 z-10">
             <div className="text-red-500 text-center mb-4">
             </div> 
             <div className="w-full max-w-lg p-6 border rounded border-blue-700">
@@ -88,6 +90,7 @@ const Page = () => {
                 </button>
                 {error && <p className="text-red-500">{error}</p>}
                 {message && <p className="text-green-500">{message}</p>}
+            </div>
             </div>
         </div>
         </>

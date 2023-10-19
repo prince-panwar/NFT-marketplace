@@ -1,7 +1,9 @@
 import Link from 'next/link';
-import ConnectWallet from './connectWallet';
 
+import ConnectWallet from './connectWallet';
+import Mint from './Mint';
 export const Navbar = () => {
+    
     return (
         <nav className="flex items-center justify-between flex-wrap bg-blue-600 p-6">
             <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -24,17 +26,20 @@ export const Navbar = () => {
                             Search
                         
                     </Link>
-                    <Link href="/Profile"className="block mt-4 lg:inline-block lg:mt-0 text-gray-200 hover:text-white">
-                        
-                            Profile
-                    
+                    <Link href="/Profile" className="block mt-4 lg:inline-block lg:mt-0 text-gray-200 hover:text-white mr-4">
+                            Profile 
                     </Link>
+
+
+                    <Mint />
+                  
                 </div>
-                <div>
+                
+                
                     
                 <ConnectWallet/>
                     
-                </div>
+                
             </div>
         </nav>
     );

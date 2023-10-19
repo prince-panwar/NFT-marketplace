@@ -18,7 +18,7 @@ const style = {
 }
 
 const Hero = () => {
-    
+
   return (
     <div className={style.wrapper}>
       <div className={style.container}>
