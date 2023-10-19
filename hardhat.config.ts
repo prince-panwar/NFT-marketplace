@@ -4,7 +4,7 @@ import "@nomicfoundation/hardhat-toolbox";
 
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.19",
+  solidity: "0.8.20",
   networks:{
     sepolia:{
       url: "https://ethereum-sepolia.blockpi.network/v1/rpc/public",
