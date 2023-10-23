@@ -7,6 +7,7 @@ import factoryContractAbi from "../../../artifacts/contracts/minterFactory.sol/M
 import { MetaMaskInpageProvider } from "@metamask/providers"
 import { useRouter } from 'next/navigation';
 import { Maybe } from '@metamask/providers/dist/utils';
+import { client } from '../../../lib/sanityClient';
 
 type ContractContextValue={
     currentUser:string|undefined,
@@ -56,15 +57,38 @@ async function getProvider(){
             const accounts: Maybe<string[]> = await window.ethereum?.request({
               method: "eth_requestAccounts",
             });
-        
+
             if (accounts) {
-              setCurrentUser(accounts[0]);
-              console.log("Accounts updated");
+               setCurrentUser(accounts[0]);
+               addUser(currentUser);
             }
+            
           } catch (error) {
             console.log("Error updating wallet address:", error);
           }
         };
+
+        const addUser = async (userAddress: string|undefined) => {
+          console.log("add user called");
+          try {
+            if (!userAddress) {
+              throw new Error('User address is undefined');
+            }
+            const userDoc = {
+              _type: 'users',
+              _id: userAddress,
+              userName: 'Unnamed',
+              walletAddress: userAddress,
+            }
+            const result = await client.createIfNotExists(userDoc)
+            console.log("Result:", result);
+            // //welcomeUser(result.userName) 
+          } catch (error) {
+            console.log("Error while adding user:", error);
+          }
+        }
+
+
 
 
 const connectWallet =async()=>{
@@ -74,9 +98,12 @@ const connectWallet =async()=>{
         if(provider){
         const account = await provider.send('eth_requestAccounts',[]);
         setCurrentUser(account[0]);
+       
         window.ethereum?.on('accountsChanged', updateCurrentWalletAddress);
         getInstance();
-        console.log("connect wallet called")
+        
+        await addUser(account[0]);
+       // console.log("connect wallet called")
         }
       }catch(err:any){
         console.log(err.message)
@@ -105,11 +132,11 @@ const getFactoryInstance = async () => {
         }
 }
       const routeUser = async (contractInst: ethers.Contract) => {
-        console.log("route user called")
+       // console.log("route user called")
         try {
           
           const isPremiumUser: boolean = await contractInst?.checkValidPremium();
-          console.log(isPremiumUser);
+        //  console.log(isPremiumUser);
       
           if (isPremiumUser) {
             router.push("/Login");
@@ -121,8 +148,7 @@ const getFactoryInstance = async () => {
         }
       };
     
-    
-    
+     
       return (
         <ContractContext.Provider value={{currentUser, contractInstance,factoryContractInstance, connectWallet }}>
           {children}
