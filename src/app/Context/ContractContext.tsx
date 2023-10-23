@@ -60,7 +60,7 @@ async function getProvider(){
 
             if (accounts) {
                setCurrentUser(accounts[0]);
-               addUser(currentUser);
+               addUser(accounts[0]);
             }
             
           } catch (error) {
