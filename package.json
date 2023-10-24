@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@3rdweb/hooks": "^1.9.2",
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/providers": "^11.1.1",
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
@@ -21,6 +22,7 @@
     "autoprefixer": "10.4.15",
     "bufferutil": "^4.0.7",
     "dotenv": "^16.3.1",
+    "encoding": "^0.1.13",
     "hardhat": "^2.17.1",
     "next": "13.4.19",
     "postcss": "8.4.28",
