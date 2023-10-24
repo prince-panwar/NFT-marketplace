@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/collections/[collectionid]/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

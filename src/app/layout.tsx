@@ -20,10 +20,11 @@ const connectors = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <ThirdwebWeb3Provider supportedChainIds={supportedChainIds} connectors={connectors} />
+      <ThirdwebWeb3Provider supportedChainIds={supportedChainIds} connectors={connectors} >
       <ContractProvider>
         <body className={inter.className}>{children}</body>
       </ContractProvider>
+      </ThirdwebWeb3Provider>
     </html>
   )
 }
