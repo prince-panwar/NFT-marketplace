@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react'
-import { BiHeart } from 'react-icons/bi'
+import { useEffect, useState } from 'react';
+import { BiHeart } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
-
-import { useContract, } from "@thirdweb-dev/react";
-import { BigNumber } from "ethers";
+import toast, { Toaster } from 'react-hot-toast';
+import {
+  useBuyDirectListing,
+  useContract,
+  Web3Button,
+} from "@thirdweb-dev/react";
 import { useAuthContract } from '../Context/ContractContext';
 
 const style = {
@@ -21,42 +24,48 @@ const style = {
   ethLogo: `h-5 mr-2`,
   likes: `text-[#8a939b] font-bold flex items-center w-full justify-end mt-3`,
   likeIcon: `text-xl mr-2`,
-}
-
+};
 
 const NFTCard = ({ listing }) => {
-  const {contract} = useContract("0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3", 'marketplace-v3');
-  const Router = useRouter()
-  const [isListed, setIsListed] = useState(false)
-  const [price, setPrice] = useState(0)
- const {authContract} = useAuthContract();
+  const { contract } = useContract("0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3", 'marketplace-v3');
+  const Router = useRouter();
+  const [isListed, setIsListed] = useState(false);
+  const [price, setPrice] = useState(0);
+  const [buyerror, setBuyError] = useState(null);
+  
+  const currentuser = useAuthContract()?.currentUser;
 
   useEffect(() => {
     if (Boolean(listing)) {
-      setIsListed(true)
-      setPrice(listing.currencyValuePerToken.displayValue)
+      setIsListed(true);
+      setPrice(listing.currencyValuePerToken.displayValue);
     }
-  }, [listing])
-  const buyoutListing = async () => {
-    const buyer = await authContract?.checkcheckValidBuyer();
-    if(!buyer){
-      Router.push('/PayPremium')
-    }else{
-    try {
-      
-      await contract?.buyout_listing(BigNumber.from(listing.asset.id), 1);
-      } catch (e) {
-      alert(e);
-      }}
+  }, [listing]);
+
+  const {
+    mutateAsync: buyDirectListing,
+    isLoading,
+    error,
+  } = useBuyDirectListing(contract);
+
+  useEffect(() => {
+    if (error) {
+      const showError = (toastHandler = toast) => {
+        toastHandler.success(`Error while purchasing check if you have sufficient funds`, {
+          style: {
+            background: '#04111d',
+            color: '#fff',
+          },
+          duration: 5000,
+        });
       };
-  
+      showError();
+    }
+  }, [error]);
+
   return (
-    <div
-      className={style.wrapper}
-      // onClick={() => {
-      //   Router.push( `/nfts/${listing.asset.id}` )
-      // }}
-    >
+    <div className={style.wrapper}>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className={style.imgContainer}>
         <img src={listing.asset.image} alt={listing.asset.name} className={style.nftImg} />
       </div>
@@ -80,12 +89,18 @@ const NFTCard = ({ listing }) => {
             </div>
           )}
         </div>
-         <button
-type="button"className="rounded-lg bg-blue-700 px-5 py-4 text-base font-bold text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-onClick={buyoutListing}
->
-Purchase
-</button>
+        <Web3Button
+          contractAddress={"0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3"}
+          action={() =>
+            buyDirectListing({
+              listingId: listing.id.toString(),
+              quantity: "1",
+              buyer: currentuser,
+            })
+          }
+        >
+          Buy Now
+        </Web3Button>
         <div className={style.likes}>
           <span className={style.likeIcon}>
             <BiHeart />
@@ -94,7 +109,7 @@ Purchase
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NFTCard
+export default NFTCard;

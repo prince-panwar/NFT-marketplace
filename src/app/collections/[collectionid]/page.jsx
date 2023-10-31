@@ -46,12 +46,12 @@ const Page = ({params}) => {
   const [listings, setListings] = useState([]); // Change the type to match your listing type
 
 
-  useEffect(() => {
-    if(!contractInst){
-      router.push('/');
-    }
+  // useEffect(() => {
+  //   if(!contractInst){
+  //     router.push('/');
+  //   }
   
-  }, []);
+  // }, []);
 
 
   const {contract} = useContract("0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3", 'marketplace-v3');
