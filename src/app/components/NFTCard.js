@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import { BiHeart } from 'react-icons/bi'
-import Router from 'next/router'
+import { useRouter } from 'next/navigation';
+
+import { useContract, } from "@thirdweb-dev/react";
+import { BigNumber } from "ethers";
+import { useAuthContract } from '../Context/ContractContext';
 
 const style = {
   wrapper: `bg-[#303339] flex-auto w-[14rem] h-[22rem] my-10 mx-5 rounded-2xl overflow-hidden cursor-pointer`,
@@ -19,43 +23,55 @@ const style = {
   likeIcon: `text-xl mr-2`,
 }
 
-const NFTCard = ({ nftItem, title, listings }) => {
+
+const NFTCard = ({ listing }) => {
+  const {contract} = useContract("0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3", 'marketplace-v3');
+  const Router = useRouter()
   const [isListed, setIsListed] = useState(false)
   const [price, setPrice] = useState(0)
+ const {authContract} = useAuthContract();
 
   useEffect(() => {
-    const listing = listings.find((listing) => listing.asset.id === nftItem.id)
     if (Boolean(listing)) {
       setIsListed(true)
-      setPrice(listing.buyoutCurrencyValuePerToken.displayValue)
+      setPrice(listing.currencyValuePerToken.displayValue)
     }
-  }, [listings, nftItem])
-
+  }, [listing])
+  const buyoutListing = async () => {
+    const buyer = await authContract?.checkcheckValidBuyer();
+    if(!buyer){
+      Router.push('/PayPremium')
+    }else{
+    try {
+      
+      await contract?.buyout_listing(BigNumber.from(listing.asset.id), 1);
+      } catch (e) {
+      alert(e);
+      }}
+      };
+  
   return (
     <div
       className={style.wrapper}
-      onClick={() => {
-        Router.push({
-          pathname: `/nfts/${nftItem.id}`,
-          query: { isListed: isListed },
-        })
-      }}
+      // onClick={() => {
+      //   Router.push( `/nfts/${listing.asset.id}` )
+      // }}
     >
       <div className={style.imgContainer}>
-        <img src={nftItem.image} alt={nftItem.name} className={style.nftImg} />
+        <img src={listing.asset.image} alt={listing.asset.name} className={style.nftImg} />
       </div>
       <div className={style.details}>
         <div className={style.info}>
           <div className={style.infoLeft}>
-            <div className={style.collectionName}>{title}</div>
-            <div className={style.assetName}>{nftItem.name}</div>
+            <div className={style.collectionName}>{listing.asset.name}</div>
+            <div className={style.assetName}>{listing.asset.name}</div>
           </div>
           {isListed && (
             <div className={style.infoRight}>
               <div className={style.priceTag}>Price</div>
               <div className={style.priceValue}>
                 <img
-                  src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                  src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=026"
                   alt="eth"
                   className={style.ethLogo}
                 />
@@ -64,11 +80,17 @@ const NFTCard = ({ nftItem, title, listings }) => {
             </div>
           )}
         </div>
+         <button
+type="button"className="rounded-lg bg-blue-700 px-5 py-4 text-base font-bold text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+onClick={buyoutListing}
+>
+Purchase
+</button>
         <div className={style.likes}>
           <span className={style.likeIcon}>
             <BiHeart />
           </span>{' '}
-          {nftItem.likes}
+          {2}
         </div>
       </div>
     </div>

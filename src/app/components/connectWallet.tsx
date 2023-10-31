@@ -1,9 +1,9 @@
 "use client"
 import React from 'react'
-import { useContract } from '../Context/ContractContext';
+import { useAuthContract } from '../Context/ContractContext';
 
 export default function ConnectWallet() {
-  const contract=useContract();
+  const contract=useAuthContract();
   const connect =  async() => {
     contract?.connectWallet();
   };

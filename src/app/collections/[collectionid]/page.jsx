@@ -2,14 +2,17 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useWeb3 } from '@3rdweb/hooks'
 import { client } from '../../../../lib/sanityClient'
-import { ThirdwebSDK } from '@3rdweb/sdk'
+import { useContract ,useDirectListings,useNFTs} from '@thirdweb-dev/react'
 import Header from '../../components/navbar'
 import { CgWebsite } from 'react-icons/cg'
 import { AiOutlineInstagram, AiOutlineTwitter } from 'react-icons/ai'
 import { HiDotsVertical } from 'react-icons/hi'
 import NFTCard from '../../components/NFTCard'
+import { useAuthContract } from '../../Context/ContractContext';
+
+
+
 
 
 const style = {
@@ -34,58 +37,36 @@ const style = {
   description: `text-[#8a939b] text-xl w-max-1/4 flex-wrap mt-4`,
 }
 const Page = ({params}) => {
+  const contractInst = useAuthContract()?.contractInstance;
   const router = useRouter();
-  const { collectionid: collectionId } = params;
-  const { provider } = useWeb3();
-  const [collection, setCollection] = useState<CollectionData>({});
-  const [nfts, setNfts] = useState([]); // Change the type to match your NFT item type
+  const  collectionId = params.collectionid;
+ 
+  const [collection, setCollection] = useState({});
+   // Change the type to match your NFT item type
   const [listings, setListings] = useState([]); // Change the type to match your listing type
 
 
-  //
-
-  const nftModule = useMemo(() => {
-    if (!provider) return
-
-    const sdk = new ThirdwebSDK(
-      provider.getSigner(),
-      'https://eth-sepolia.g.alchemy.com/v2/tUv5LbR7WkI2P8UaGL0_htKnOUqom99Z'
-    )
-    return sdk.getNFTModule(collectionId)
-  }, [provider])
-
-  // get all NFTs in the collection
   useEffect(() => {
-    if (!nftModule) return
-    ;(async () => {
-      const nfts = await nftModule.getAll()
+    if(!contractInst){
+      router.push('/');
+    }
+  
+  }, []);
 
-      setNfts(nfts)
-    })()
-  }, [nftModule])
 
-  const marketPlaceModule = useMemo(() => {
-    if (!provider) return
-
-    const sdk = new ThirdwebSDK(
-      provider.getSigner(),
-      'https://eth-sepolia.g.alchemy.com/v2/tUv5LbR7WkI2P8UaGL0_htKnOUqom99Z'
-    )
-    return sdk.getMarketplaceModule(
-      '0x93A771F7ce845C33381f677489cF21a5964EDD0b'
-    )
-  }, [provider])
-
-  // get all listings in the collection
+  const {contract} = useContract("0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3", 'marketplace-v3');
+  const { data, isLoading, error } = useDirectListings(contract);
   useEffect(() => {
-    if (!marketPlaceModule) return
-    ;(async () => {
-      setListings(await marketPlaceModule.getAllListings())
-    })()
-  }, [marketPlaceModule])
+    if (!isLoading && data) {
+      setListings(data);
+    }
+  }, [isLoading, data]);
+  console.log(data);
 
+
+  
   const fetchCollectionData = async (sanityClient = client) => {
-    const query = `*[_type == "marketItems" && contractAddress == "${collectionId}" ] {
+    const query = `*[_type == "marketItems" && contractAddress == "${collectionId}" ]{
       "imageUrl": profileImage.asset->url,
       "bannerImageUrl": bannerImage.asset->url,
       volumeTraded,
@@ -99,7 +80,7 @@ const Page = ({params}) => {
 
     const collectionData = await sanityClient.fetch(query)
 
-    console.log(collectionData, '🔥')
+    
 
     // the query returns 1 object inside of an array
     await setCollection(collectionData[0])
@@ -109,8 +90,8 @@ const Page = ({params}) => {
     fetchCollectionData()
   }, [collectionId])
 
-  console.log(router.query)
-  console.log(router.query.collectionId)
+  
+  //console.log(collectionId)
   return (
     <div className="overflow-hidden">
       <Header />
@@ -172,7 +153,7 @@ const Page = ({params}) => {
         <div className={style.midRow}>
           <div className={style.statsContainer}>
             <div className={style.collectionStat}>
-              <div className={style.statValue}>{nfts.length}</div>
+              <div className={style.statValue}>{listings.length}</div>
               <div className={style.statName}>items</div>
             </div>
             <div className={style.collectionStat}>
@@ -184,7 +165,7 @@ const Page = ({params}) => {
             <div className={style.collectionStat}>
               <div className={style.statValue}>
                 <img
-                  src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                  src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=026"
                   alt="eth"
                   className={style.ethLogo}
                 />
@@ -195,7 +176,7 @@ const Page = ({params}) => {
             <div className={style.collectionStat}>
               <div className={style.statValue}>
                 <img
-                  src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                  src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=026"
                   alt="eth"
                   className={style.ethLogo}
                 />
@@ -210,12 +191,9 @@ const Page = ({params}) => {
         </div>
       </div>
       <div className="flex flex-wrap ">
-        {nfts.map((nftItem, id) => (
+        {listings.map((listing) => (
           <NFTCard
-            key={id}
-            nftItem={nftItem}
-            title={collection?.title}
-            listings={listings}
+            listing={listing}
           />
         ))}
       </div>

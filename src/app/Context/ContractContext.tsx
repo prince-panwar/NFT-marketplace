@@ -38,14 +38,15 @@ export const ContractProvider: React.FC<ContractProviderProps> = ({ children }) 
   const abi = ContractAbi.abi;
   const factoryAbi = factoryContractAbi.abi;
   const FACTORY_CONTRACT_ADDRESS = '0x009c4D687550f46e3Ab0FEd2551401a0f36C27Ec';
-  const contractAddress = '0xABE8b1243EC7862ebEF27f23e0EEb467c376EF20';
+  const contractAddress = '0x3Da096fA7EB2BF003b8803d381fA769e3baF393b';
   const router = useRouter();
+
 
   async function getProvider() {
     if (typeof window !== 'undefined') {
       const ETHProvider: Eip1193Provider | null = await detectEthereumProvider();
       if (ETHProvider) {
-        setProvider(new ethers.BrowserProvider(ETHProvider));
+        setProvider(new ethers.providers.Web3Provider(ETHProvider));
       } else {
         alert('Please install MetaMask wallet to use this site');
       }
@@ -126,9 +127,7 @@ export const ContractProvider: React.FC<ContractProviderProps> = ({ children }) 
   const routeUser = async (contractInst: ethers.Contract) => {
     try {
       const isPremiumUser: boolean = await contractInst?.checkValidPremium();
-      if (isPremiumUser) {
-        router.push('/Login');
-      } else {
+      if (!isPremiumUser) {
         router.push('/PayPremium');
       }
     } catch (error) {
@@ -143,4 +142,4 @@ export const ContractProvider: React.FC<ContractProviderProps> = ({ children }) 
   );
 };
 
-export const useContract = () => useContext(ContractContext);
+export const useAuthContract = () => useContext(ContractContext);

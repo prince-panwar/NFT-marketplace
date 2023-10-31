@@ -1,6 +1,6 @@
 "use client"
 import React, { useState,useEffect } from "react";
-import { useContract } from '../Context/ContractContext';
+import { useAuthContract } from '../Context/ContractContext';
 import { useRouter } from 'next/navigation';
 import Navbar from "../components/navbar";
 
@@ -11,8 +11,9 @@ const Page = () => {
     const [error, setError] = useState("");
     const [message, setMessage] = useState(""); 
     const premiumTypes = ["OneMonth", "SixMonth", "OneYear"];
+    const userTypes = ["Free", "Buyes","Seller"];
     const premiumPrices = [100000000000000, 200000000000000, 300000000000000];
-    const contract = useContract()?.contractInstance;
+    const contract = useAuthContract()?.contractInstance;
     const router =useRouter();
     useEffect(() => {
         if(!contract){
@@ -67,21 +68,21 @@ const Page = () => {
                     ))}
                 </select>
                 <br />
+                <select
+                    className="text-black mb-4"
+                    name="premiumType"
+                    value={selectedPremiumIndex}
+                    onChange={(e) => setSelectedPremiumIndex(parseInt(e.target.value))}
+                >
+                    {userTypes.map((userType, index) => (
+                        <option key={userType} value={index}>
+                            {userType}
+                        </option>
+                    ))}
+                </select>
                 
-                <input  
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password" 
-                placeholder="Enter Password"
-                className="text-black mb-4"/>
-                <br />
-                <input  
-                value={confirmpassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                type="password" 
-                placeholder="Confirm Password"
-                className="text-black mb-4"/>
-                <br />
+               
+                <br/>
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
                     onClick={handlePay}

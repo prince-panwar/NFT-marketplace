@@ -23,19 +23,25 @@ import type {
 export interface PremiumContractInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "checkValidPassword"
+      | "checkValidBuyer"
       | "checkValidPremium"
+      | "checkValidSeller"
       | "owner"
       | "premiums"
       | "purchasePremium"
+      | "userTypes"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "checkValidPassword",
-    values: [string]
+    functionFragment: "checkValidBuyer",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "checkValidPremium",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkValidSeller",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -45,15 +51,23 @@ export interface PremiumContractInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "purchasePremium",
-    values: [BigNumberish, string]
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "userTypes",
+    values: [BigNumberish]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "checkValidPassword",
+    functionFragment: "checkValidBuyer",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "checkValidPremium",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkValidSeller",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -62,6 +76,7 @@ export interface PremiumContractInterface extends Interface {
     functionFragment: "purchasePremium",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "userTypes", data: BytesLike): Result;
 }
 
 export interface PremiumContract extends BaseContract {
@@ -107,13 +122,11 @@ export interface PremiumContract extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  checkValidPassword: TypedContractMethod<
-    [_password: string],
-    [boolean],
-    "view"
-  >;
+  checkValidBuyer: TypedContractMethod<[], [boolean], "view">;
 
   checkValidPremium: TypedContractMethod<[], [boolean], "view">;
+
+  checkValidSeller: TypedContractMethod<[], [boolean], "view">;
 
   owner: TypedContractMethod<[], [string], "view">;
 
@@ -130,20 +143,25 @@ export interface PremiumContract extends BaseContract {
   >;
 
   purchasePremium: TypedContractMethod<
-    [_premiumIndex: BigNumberish, _password: string],
+    [_premiumIndex: BigNumberish, _userIndex: BigNumberish],
     [void],
     "payable"
   >;
+
+  userTypes: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
   getFunction(
-    nameOrSignature: "checkValidPassword"
-  ): TypedContractMethod<[_password: string], [boolean], "view">;
+    nameOrSignature: "checkValidBuyer"
+  ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
     nameOrSignature: "checkValidPremium"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "checkValidSeller"
   ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
     nameOrSignature: "owner"
@@ -164,10 +182,13 @@ export interface PremiumContract extends BaseContract {
   getFunction(
     nameOrSignature: "purchasePremium"
   ): TypedContractMethod<
-    [_premiumIndex: BigNumberish, _password: string],
+    [_premiumIndex: BigNumberish, _userIndex: BigNumberish],
     [void],
     "payable"
   >;
+  getFunction(
+    nameOrSignature: "userTypes"
+  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
 
   filters: {};
 }

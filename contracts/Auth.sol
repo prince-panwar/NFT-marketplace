@@ -8,35 +8,44 @@ contract PremiumContract {
     uint256 amount;
     uint256 validity;
     }
+    
 
     // Use a struct array instead of an enum mapping
     Premium[] public premiums;
-
+   
+    string[] public userTypes;
+    
 
     constructor() {
     owner = msg.sender;
     // Push new premiums to the array
-    premiums.push(Premium("OneMonth",100000000000000,30 seconds));
-    premiums.push(Premium("SixMonths",200000000000000,1 minutes));
-    premiums.push(Premium("OneYear",300000000000000,2 minutes));
+    userTypes.push("Free"); 
+    userTypes.push("Buyer");
+    userTypes.push("Seller");
+    premiums.push(Premium("OneMonth",100000000000000,5 minutes));
+    premiums.push(Premium("SixMonths",200000000000000,10 minutes));
+    premiums.push(Premium("OneYear",300000000000000,20 minutes));
     }
+
 
     struct User {
     address userAddress;
-    bytes32 password;
     uint256 premiumIndex; // Use a uint256 instead of an enum
+    string usertype;
     uint256 premiumPurchaseDate;
     uint256 expiryDate;
+
     }
     mapping(address => User) users;
-    function purchasePremium(uint256 _premiumIndex,string calldata _password) external payable {
+    function purchasePremium(uint256 _premiumIndex,uint256 _userIndex) external payable {
     // Check if the index is valid
     require(_premiumIndex < premiums.length, "Invalid premium index");
+    require(_userIndex<userTypes.length,"Invalid user index");
     require(msg.value == premiums[_premiumIndex].amount, "Incorrect premium amount");
     Premium memory selectedPremium = premiums[_premiumIndex];
     uint256 expiry = block.timestamp + selectedPremium.validity;
-    bytes32 hashedPassword = keccak256(abi.encodePacked(_password));
-    users[msg.sender] = User(msg.sender,hashedPassword,_premiumIndex,block.timestamp,expiry);
+    string memory user = userTypes[_userIndex];
+    users[msg.sender] = User(msg.sender,_premiumIndex,user,block.timestamp,expiry);
     // Transfer the received ether to the owner of the contract
     payable(owner).transfer(msg.value);
     }
@@ -46,10 +55,12 @@ contract PremiumContract {
         return user.expiryDate > block.timestamp;
     }
 
-    function checkValidPassword(string memory _password) external view returns (bool) {
+    function checkValidBuyer() external view returns (bool) {
     User memory user = users[msg.sender];
-    // Hash the input password before comparing it
-    bytes32 hashedPassword = keccak256(abi.encodePacked(_password));
-    return user.password == hashedPassword && user.expiryDate > block.timestamp;
+    return keccak256(bytes(user.usertype)) == keccak256(bytes("Buyer")) && user.expiryDate > block.timestamp;
+    }
+    function checkValidSeller() external view returns (bool) {
+    User memory user = users[msg.sender];
+    return keccak256(bytes(user.usertype)) == keccak256(bytes("Seller")) && user.expiryDate > block.timestamp;
     }
 }
