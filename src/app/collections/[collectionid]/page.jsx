@@ -11,10 +11,6 @@ import { HiDotsVertical } from 'react-icons/hi'
 import NFTCard from '../../components/NFTCard'
 import { useAuthContract } from '../../Context/ContractContext';
 
-
-
-
-
 const style = {
   bannerImageContainer: `h-[20vh] w-screen overflow-hidden flex justify-center items-center`,
   bannerImage: `w-full object-cover`,
@@ -46,14 +42,15 @@ const Page = ({params}) => {
   const [listings, setListings] = useState([]); // Change the type to match your listing type
 
 
-  // useEffect(() => {
-  //   if(!contractInst){
-  //     router.push('/');
-  //   }
+  useEffect(() => {
+    if(!contractInst){
+      router.push('/');
+    }
   
-  // }, []);
+  }, []);
 
-
+  // const {nftsContract} =useContract("0x472E3f14B7cE81e4ff732360F2BBBF7198eD93c7","nftcollection");
+  // console.log("nftsContract",nftsContract);
   const {contract} = useContract("0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3", 'marketplace-v3');
   const { data, isLoading, error } = useDirectListings(contract);
   useEffect(() => {
@@ -61,7 +58,7 @@ const Page = ({params}) => {
       setListings(data);
     }
   }, [isLoading, data]);
-  console.log(data);
+  // console.log(data);
 
 
   

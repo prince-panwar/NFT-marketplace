@@ -6,12 +6,11 @@ import Navbar from "../components/navbar";
 
 const Page = () => {
     const [selectedPremiumIndex, setSelectedPremiumIndex] = useState(0);
-    const [password , setPassword] = useState<string|undefined>(undefined); // Initialize with 0
-    const [confirmpassword , setConfirmPassword] = useState<string|undefined>(undefined); // Initialize with 0
+    const [selectedUserIndex, setSelectedUserIndex] = useState(0);
     const [error, setError] = useState("");
     const [message, setMessage] = useState(""); 
     const premiumTypes = ["OneMonth", "SixMonth", "OneYear"];
-    const userTypes = ["Free", "Buyes","Seller"];
+    const userTypes = ["Free", "Buyer","Seller"];
     const premiumPrices = [100000000000000, 200000000000000, 300000000000000];
     const contract = useAuthContract()?.contractInstance;
     const router =useRouter();
@@ -22,20 +21,18 @@ const Page = () => {
       
       }, []);
     const handlePay = async () => {
-        if(password!==confirmpassword){
-            setError("Passwords should be same");
-            return;
-        }
+        
+        
         // console.log(selectedPremiumIndex);
         // console.log(password);
         // console.log(premiumPrices[selectedPremiumIndex]);
 
         try {
-            let tx = await contract?.purchasePremium(selectedPremiumIndex,password,{value:premiumPrices[selectedPremiumIndex]});
+            let tx = await contract?.purchasePremium(selectedPremiumIndex,selectedUserIndex,{value:premiumPrices[selectedPremiumIndex]});
             await tx.wait();// Pass the index
             console.log(await tx.wait());
             setMessage("Premium purchased successfully");
-            router.push('/MintNFT');
+            router.push('/create');
         } catch (e:any) {
             setError(e.message);
             setMessage("");
@@ -70,9 +67,9 @@ const Page = () => {
                 <br />
                 <select
                     className="text-black mb-4"
-                    name="premiumType"
-                    value={selectedPremiumIndex}
-                    onChange={(e) => setSelectedPremiumIndex(parseInt(e.target.value))}
+                    name="userType"
+                    value={selectedUserIndex}
+                    onChange={(e) => setSelectedUserIndex(parseInt(e.target.value))}
                 >
                     {userTypes.map((userType, index) => (
                         <option key={userType} value={index}>

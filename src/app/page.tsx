@@ -17,6 +17,9 @@ export default function Home() {
   
   }, []);
   useEffect(() => {
+    if (UserName) {
+      
+    
     const welcomeUser = (toastHandler = toast) => {
       toastHandler.success(`Welcome back${UserName !== 'Unnamed' ? ` ${UserName}` : ''}!`, {
         style: {
@@ -25,10 +28,10 @@ export default function Home() {
         },
       });
     };
+    welcomeUser();
 
-    if (currentUser) {
-      welcomeUser();
-    }
+    
+  }
   }, [currentUser, UserName]);
 
   return (
