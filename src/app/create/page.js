@@ -47,7 +47,7 @@ const handlePay = async () => {
     <div className="relative min-h-screen before:content-[''] before:bg-red-500 before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:bg-[url('https://lh3.googleusercontent.com/ujepnqpnL0nDQIHsWxlCXzyw4pf01yjz1Jmb4kAQHumJAPrSEj0-e3ABMZlZ1HEpJoqwOcY_kgnuJGzfXbd2Tijri66GXUtfN2MXQA=s250')] before:bg-cover before:bg-center before:opacity-30 before:blur before:pointer-events-none">
    
     <div className="nft-form bg-black text-white p-8 flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form  className="space-y-4">
         <label htmlFor="name" className="block">
           <span className="text-sm">Name your NFT*</span>
           <input

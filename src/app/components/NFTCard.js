@@ -31,9 +31,51 @@ const NFTCard = ({ listing }) => {
   const Router = useRouter();
   const [isListed, setIsListed] = useState(false);
   const [price, setPrice] = useState(0);
-  const [buyerror, setBuyError] = useState(null);
-  
   const currentuser = useAuthContract()?.currentUser;
+  const nftContract = useAuthContract()?.contractInstance;
+  const [isBuyer, setIsBuyer] = useState(undefined);
+  useEffect(() => {
+    const checkBuyer = async () => {
+      try {
+        const Buyer = await nftContract?.checkValidBuyer();
+        setIsBuyer(Buyer);
+        if (isBuyer==false) {
+          NotPremiumUser();
+        }
+        console.log("Buyer",Buyer)
+      } catch (err) {
+        alert(err);
+      }
+    };
+  
+    checkBuyer();
+  
+    
+  }, []);
+  
+ 
+  
+  const NotPremiumUser = () => {
+    const goToPayPremium = () => {
+      Router.push('/PayPremium');
+      
+    };
+  
+    const toastId = toast.success(
+      <div>
+        You are not a premium User. So you can't buy NFT. Please purchase a premium 
+        <br />
+        <button onClick={goToPayPremium}>Here</button>
+      </div>, 
+      {
+        style: {
+          background: '#04111d',
+          color: '#fff',
+        },
+        duration: 20000,
+      }
+    );
+  };
 
   useEffect(() => {
     if (Boolean(listing)) {
@@ -89,18 +131,21 @@ const NFTCard = ({ listing }) => {
             </div>
           )}
         </div>
-        <Web3Button
-          contractAddress={"0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3"}
-          action={() =>
-            buyDirectListing({
-              listingId: listing.id.toString(),
-              quantity: "1",
-              buyer: currentuser,
-            })
-          }
-        >
-          Buy Now
-        </Web3Button>
+        {isBuyer && (
+  <Web3Button
+    contractAddress="0xF5e97d49d3Be3Ad7737862aA897Caa8927f6bdd3"
+    action={() =>
+      buyDirectListing({
+        listingId: listing.id.toString(),
+        quantity: "1",
+        buyer: currentuser,
+      })
+    }
+  >
+    Buy Now
+  </Web3Button>
+) }
+ 
         <div className={style.likes}>
           <span className={style.likeIcon}>
             <BiHeart />

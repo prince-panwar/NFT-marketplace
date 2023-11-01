@@ -32,7 +32,7 @@ const Page = () => {
             await tx.wait();// Pass the index
             console.log(await tx.wait());
             setMessage("Premium purchased successfully");
-            router.push('/create');
+            router.push('/collections/0x472E3f14B7cE81e4ff732360F2BBBF7198eD93c7');
         } catch (e:any) {
             setError(e.message);
             setMessage("");

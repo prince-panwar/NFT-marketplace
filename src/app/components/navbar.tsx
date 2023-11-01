@@ -50,7 +50,11 @@ const Header = () => {
           <CgProfile />
         </div>
         <div className={style.headerIcon}>
-          <MdOutlineAccountBalanceWallet />
+        <Link href="/PayPremium">
+        <MdOutlineAccountBalanceWallet />
+        </Link>
+
+          
         </div>
       </div>
     </div>
